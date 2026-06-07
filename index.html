@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://googleapis.com" />
+    <link rel="preconnect" href="https://gstatic.com" crossorigin />
+    <link
+      href="https://googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cloudflare.com" />
+    <link rel="stylesheet" href="css/estilos.css" />
+    <title>Portafolio3D</title>
+    <style>
+      /* --- Estilos CSS de la Cacatúa Seguidora --- */
+      .cacatua-contenedor {
+        position: fixed;
+        width: 60px;
+        height: 90px;
+        z-index: 9999;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition:
+          left 0.1s linear,
+          top 0.1s linear;
+      }
+      .cacatua-cuerpo {
+        position: absolute;
+        bottom: 0;
+        left: 15px;
+        width: 30px;
+        height: 50px;
+        background-color: #f5f5f5;
+        border-radius: 20px 20px 10px 10px;
+        box-shadow: inset -3px 0px 0px #e0e0e0;
+      }
+      .cacatua-cabeza {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 32px;
+        height: 32px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        animation: moverCabezaRapido 1.5s infinite ease-in-out;
+      }
+      .cacatua-cresta {
+        position: absolute;
+        top: -10px;
+        left: 6px;
+        width: 20px;
+        height: 20px;
+      }
+      .pluma {
+        position: absolute;
+        bottom: 0;
+        left: 5px;
+        width: 6px;
+        height: 18px;
+        background-color: #ffd54f;
+        border-radius: 50% 50% 0 0;
+        transform-origin: bottom center;
+        opacity: 0.95;
+      }
+      .pluma-1 {
+        animation: animPluma1 2s infinite alternate ease-in-out;
+      }
+      .pluma-2 {
+        animation: animPluma2 2s infinite alternate ease-in-out;
+        animation-delay: 0.1s;
+      }
+      .pluma-3 {
+        animation: animPluma3 2s infinite alternate ease-in-out;
+        animation-delay: 0.2s;
+      }
+      .cacatua-ojo {
+        position: absolute;
+        top: 10px;
+        right: 8px;
+        width: 4px;
+        height: 4px;
+        background-color: #212121;
+        border-radius: 50%;
+      }
+      .cacatua-pico {
+        position: absolute;
+        top: 13px;
+        right: -5px;
+        width: 8px;
+        height: 12px;
+        background-color: #424242;
+        border-radius: 0% 100% 100% 0% / 0% 50% 50% 0%;
+        transform-origin: top left;
+        animation: abrirPicoRapido 0.8s infinite alternate ease-in-out;
+      }
+      .mirar-izquierda {
+        transform: translate(-50%, -50%) scaleX(-1);
+      }
+      @keyframes moverCabezaRapido {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
+      }
+      @keyframes abrirPicoRapido {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(12deg);
+        }
+      }
+      @keyframes animPluma1 {
+        0% {
+          transform: rotate(-10deg) scaleY(1);
+        }
+        100% {
+          transform: rotate(-45deg) scaleY(1.2);
+        }
+      }
+      @keyframes animPluma2 {
+        0% {
+          transform: rotate(0deg) scaleY(1);
+        }
+        100% {
+          transform: rotate(0deg) scaleY(1.35);
+        }
+      }
+      @keyframes animPluma3 {
+        0% {
+          transform: rotate(10deg) scaleY(1);
+        }
+        100% {
+          transform: rotate(45deg) scaleY(1.2);
+        }
+      }
+
+      .audio-wrapper {
+        position: fixed;
+        display: inline-block;
+      }
+
+      #particles-container {
+        position: absolute;
+        inset: 0;
+        overflow: visible;
+        pointer-events: none;
+      }
+
+      .particula {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        box-shadow: 0 0 12px currentColor;
+        animation: volar 2s linear forwards;
+      }
+
+      @keyframes volar {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0) scale(1);
+        }
+
+        100% {
+          opacity: 0;
+          transform: translate(var(--x), var(--y)) scale(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="navbar">
+        <div class="left">
+          Galeria de padrecito
+          <div class="audio-wrapper">
+            <audio id="miAudio" autoplay controls>
+              <source src="nugenea.mp3" type="audio/mpeg" />
+            </audio>
+
+            <div id="particles-container"></div>
+          </div>
+          <!-- Cacatúa interactiva -->
+          <div class="cacatua-contenedor" id="cacatuaSeguidora">
+            <div class="cacatua-cuerpo"></div>
+            <div class="cacatua-cabeza">
+              <div class="cacatua-cresta">
+                <div class="pluma pluma-1"></div>
+                <div class="pluma pluma-2"></div>
+                <div class="pluma pluma-3"></div>
+              </div>
+              <div class="cacatua-ojo"></div>
+              <div class="cacatua-pico"></div>
+            </div>
+          </div>
+        </div>
+        <nav class="right">
+          <a href="#trabajos">Trabajos</a>
+          <a href="#contacto">Contacto</a>
+          <a href="#twitter"
+            ><i class="fa-brands fa-square-x-twitter fa-2x"></i
+          ></a>
+          <a href="#facebook"><i class="fa-brands fa-facebook fa-2x"></i></a>
+          <a href="#instagram"
+            ><i class="fa-brands fa-square-instagram fa-2x"></i
+          ></a>
+        </nav>
+        <div class="hamburger">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </header>
+      <!-- Proyectos -->
+      <div class="proyectos">
+        <div class="proyecto" id="apartamento">
+          <img src="img/imagen1.jpg" alt="proyecto1" />
+          <p class="superpuesto blanco">
+            Cada ciudad puede ser otra cuando el amor la transfigura cada ciudad
+            puede ser tantas como amorosos la recorren el amor pasa por los
+            parques casi sin verlos amándolos entre la fiesta de los pájaros y
+            la homilía de los pinos cada ciudad puede ser otra cuando el amor
+            pinta los muros y de los rostros que atardecen uno es el rostro del
+            amor y el amor viene y va y regresa y la ciudad es el testigo de sus
+            abrazos y crepúsculos de sus bonanzas y aguaceros y si el amor se va
+            y no vuelve la ciudad carga con su otoño ya que le quedan sólo el
+            duelo y las estatuas del amor.
+          </p>
+        </div>
+        <div class="proyecto" id="casa1">
+          <img src="img/imagen2.jpg" alt="proyecto1" />
+          <p class="superpuesto blanco">
+            “El conocimiento de uno mismo puede matar al dragón del miedo y de
+            la duda”
+          </p>
+        </div>
+        <div class="proyecto" id="casa2">
+          <img src="img/imagen3.jpg" alt="proyecto1" />
+          <p class="superpuesto">
+            “Ponemos barreras para protegernos de quienes creemos que somos.
+            Luego un día quedamos atrapados tras las barreras y ya no podemos
+            salir”.
+          </p>
+        </div>
+        <div class="proyecto" id="casa3">
+          <img src="img/imagen4.jpg" alt="proyecto1" />
+          <p class="superpuesto blanco">
+            "Casi muero por todas las lágrimas que no derramé"
+          </p>
+        </div>
+        <div class="proyecto" id="casa4">
+          <img src="img/imagen5.jpg" alt="proyecto1" />
+          <p class="superpuesto">
+            Te dejo con tu vida tu trabajo tu gente con tus puestas de sol y tus
+            amaneceres. Sembrando tu confianza te dejo junto al mundo derrotando
+            imposibles segura sin seguro. Te dejo frente al mar descifrándote
+            sola sin mi pregunta a ciegas sin mi respuesta rota.
+          </p>
+        </div>
+        <div class="proyecto" id="casa5">
+          <img src="img/imagen6.jpg" alt="proyecto1" />
+          <p class="superpuesto">
+            «Aunque este Universo poseo, nada poseo, pues no puedo conocer lo
+            desconocido si me aferro a lo conocido»
+          </p>
+        </div>
+        <div class="proyecto" id="casa6">
+          <img src="img/imagen7.jpg" alt="proyecto1" />
+          <p class="superpuesto blanco">
+            Cuerpo de mujer, blancas colinas, muslos blancos, te pareces al
+            mundo en tu actitud de entrega. Mi cuerpo de labriego salvaje te
+            socava y hace saltar el hijo del fondo de la tierra. Fui solo como
+            un túnel. De mí huían los pájaros y en mí la noche entraba su
+            invasión poderosa. Para sobrevivirme te forjé como un arma, como una
+            flecha en mi arco, como una piedra en mi honda. Pero cae la hora de
+            la venganza, y te amo. Cuerpo de piel, de musgo, de leche ávida y
+            firme. Ah los vasos del pecho! Ah los ojos de ausencia! Ah las rosas
+            del pubis! Ah tu voz lenta y triste! Cuerpo de mujer mía, persistiré
+            en tu gracia. Mi sed, mi ansia sin límite, mi camino indeciso!
+            Oscuros cauces donde la sed eterna sigue, y la fatiga sigue, y el
+            dolor infinito.
+          </p>
+        </div>
+        <div class="proyecto" id="casa7">
+          <img src="img/imagen8.jpg" alt="proyecto1" />
+          <p class="superpuesto blanco">
+            No te rindas, aun estas a tiempo de alcanzar y comenzar de nuevo,
+            aceptar tus sombras, enterrar tus miedos, liberar el lastre, retomar
+            el vuelo. No te rindas que la vida es eso, continuar el viaje,
+            perseguir tus sueños, destrabar el tiempo, correr los escombros y
+            destapar el cielo. No te rindas, por favor no cedas, aunque el frio
+            queme, aunque el miedo muerda, aunque el sol se esconda y se calle
+            el viento, aun hay fuego en tu alma, aun hay vida en tus sueños,
+            porque la vida es tuya y tuyo tambien el deseo, porque lo has
+            querido y porque te quiero. Porque existe el vino y el amor, es
+            cierto, porque no hay heridas que no cure el tiempo, abrir las
+            puertas quitar los cerrojos, abandonar las murallas que te
+            protegieron.
+          </p>
+        </div>
+        <div class="proyecto" id="casa8">
+          <img src="img/imagen9.jpg" alt="proyecto1" />
+          <p class="superpuesto blanco">
+            "Una persona no puede correr y aprender a la vez, debe permanecer en
+            un lugar durante un tiempo
+          </p>
+        </div>
+      </div>
+      <footer class="footer">By Mr Bitch</footer>
+    </div>
+    <script>
+      const cacatua = document.getElementById("cacatuaSeguidora");
+      let ultimaX = 0;
+      document.addEventListener("mousemove", (e) => {
+        cacatua.style.left = e.clientX + "px";
+        cacatua.style.top = e.clientY + "px";
+        if (e.clientX < ultimaX) cacatua.classList.add("mirar-izquierda");
+        else if (e.clientX > ultimaX)
+          cacatua.classList.remove("mirar-izquierda");
+        ultimaX = e.clientX;
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const audio = document.getElementById("miAudio");
+
+        if (!audio) {
+          console.log("No se encontró el audio con id='miAudio'");
+          return;
+        }
+
+        const colores = [
+          "#ff0000",
+          "#ff8800",
+          "#ffff00",
+          "#00ff00",
+          "#00ffff",
+          "#0088ff",
+          "#ff00ff",
+        ];
+
+        let intervalo = null;
+
+        function crearParticula() {
+          const rect = audio.getBoundingClientRect();
+
+          const p = document.createElement("div");
+
+          p.style.position = "fixed";
+          p.style.width = "10px";
+          p.style.height = "10px";
+          p.style.borderRadius = "50%";
+          p.style.pointerEvents = "none";
+          p.style.zIndex = "99999";
+
+          const color = colores[Math.floor(Math.random() * colores.length)];
+
+          p.style.background = color;
+          p.style.boxShadow = `0 0 15px ${color}`;
+
+          p.style.left = rect.left + rect.width / 2 + "px";
+
+          p.style.top = rect.top + rect.height / 2 + "px";
+
+          document.body.appendChild(p);
+
+          const dx = (Math.random() - 0.5) * 300;
+          const dy = -Math.random() * 250 - 50;
+
+          p.animate(
+            [
+              {
+                transform: "translate(0,0) scale(1)",
+                opacity: 1,
+              },
+              {
+                transform: `translate(${dx}px,${dy}px) scale(0)`,
+                opacity: 0,
+              },
+            ],
+            {
+              duration: 2000,
+              easing: "ease-out",
+            },
+          );
+
+          setTimeout(() => p.remove(), 2000);
+        }
+
+        function iniciar() {
+          if (intervalo) return;
+
+          intervalo = setInterval(() => {
+            for (let i = 0; i < 5; i++) {
+              crearParticula();
+            }
+          }, 100);
+        }
+
+        function detener() {
+          clearInterval(intervalo);
+          intervalo = null;
+        }
+
+        audio.addEventListener("play", iniciar);
+        audio.addEventListener("pause", detener);
+        audio.addEventListener("ended", detener);
+      });
+    </script>
+  </body>
+</html>
